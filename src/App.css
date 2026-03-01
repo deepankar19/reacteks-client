@@ -9,7 +9,7 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 10% 10%, #e0e7ff 0%, #f8fafc 40%);
+  background-color: green;
 }
 
 #root {
