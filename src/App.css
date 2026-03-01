@@ -237,6 +237,19 @@ h2 {
   margin: 0 0 0.4rem;
 }
 
+.testimonial-card .quote {
+  font-style: italic;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+.testimonial-card .author {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-align: right;
+}
+
 .mini-line {
   margin-top: 0.7rem;
   height: 6px;

@@ -53,6 +53,7 @@ function App() {
           <a href="#services">Services</a>
           <a href="#industries">Industries</a>
           <a href="#cases">Case Studies</a>
+          <a href="#testimonials">Testimonials</a>
           <a href="#insights">Insights</a>
         </nav>
       </header>
@@ -138,6 +139,20 @@ function App() {
             ))}
           </ul>
         </section>
+
+        {pageData.testimonials && pageData.testimonials.length > 0 && (
+          <section id="testimonials">
+            <h2>What Our Clients Say</h2>
+            <div className="grid">
+              {pageData.testimonials.map((item, index) => (
+                <article className="card testimonial-card" key={index}>
+                  <p className="quote">"{item.quote}"</p>
+                  <p className="author">— {item.author}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <footer>
