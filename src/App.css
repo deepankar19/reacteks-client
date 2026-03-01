@@ -9,7 +9,7 @@
 
 body {
   margin: 0;
-  background-color: green;
+  background-color: white;
 }
 
 #root {
@@ -75,7 +75,7 @@ nav a {
 }
 
 .hero {
-  background: linear-gradient(135deg, #0f172a, #1e3a8a 55%, #4338ca);
+  background: grey;
   color: #fff;
   border-radius: 16px;
   padding: 3rem 2rem;
