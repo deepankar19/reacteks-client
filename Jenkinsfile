@@ -23,14 +23,21 @@ pipeline {
 
   environment {
     KUBECONFIG = "${WORKSPACE}/.kube/config"
+    AWS_REGION = "${params.AWS_REGION ?: 'ap-south-1'}"
+    EKS_CLUSTER_NAME = "${params.EKS_CLUSTER_NAME ?: 'foodadvocate'}"
+    K8S_NAMESPACE = "${params.K8S_NAMESPACE ?: 'default'}"
+    VITE_API_BASE_URL = "${params.VITE_API_BASE_URL ?: ''}"
   }
 
   stages {
     stage('Init Vars') {
       steps {
         script {
+          env.AWS_REGION = params.AWS_REGION ?: 'ap-south-1'
+          env.EKS_CLUSTER_NAME = params.EKS_CLUSTER_NAME ?: 'foodadvocate'
+          env.K8S_NAMESPACE = params.K8S_NAMESPACE ?: 'default'
           env.FINAL_TAG = params.IMAGE_TAG?.trim() ? params.IMAGE_TAG.trim() : env.BUILD_NUMBER
-          env.ECR_REGISTRY = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.AWS_REGION}.amazonaws.com"
+          env.ECR_REGISTRY = "${params.AWS_ACCOUNT_ID ?: '723338844144'}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
           env.REACT_ECR_REPO_VAL = params.REACT_ECR_REPOSITORY?.trim() ? params.REACT_ECR_REPOSITORY.trim() : 'reacteks-client'
           env.REACT_IMAGE_URI = "${env.ECR_REGISTRY}/${env.REACT_ECR_REPO_VAL}:${env.FINAL_TAG}"
         }
@@ -55,8 +62,8 @@ pipeline {
           sh '''#!/usr/bin/env bash
             set -euo pipefail
 
-            aws ecr get-login-password --region "${AWS_REGION}" \
-              | docker login --username AWS --password-stdin "${ECR_REGISTRY}"
+            aws ecr get-login-password --region "${AWS_REGION:-ap-south-1}" \
+              | docker login --username AWS --password-stdin "${ECR_REGISTRY:-}"
 
             docker build \
               --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL:-}" \
@@ -84,8 +91,8 @@ pipeline {
 
             mkdir -p "$(dirname "${KUBECONFIG}")"
             aws eks update-kubeconfig \
-              --name "${EKS_CLUSTER_NAME}" \
-              --region "${AWS_REGION}" \
+              --name "${EKS_CLUSTER_NAME:-foodadvocate}" \
+              --region "${AWS_REGION:-ap-south-1}" \
               --kubeconfig "${KUBECONFIG}"
 
             kubectl --kubeconfig "${KUBECONFIG}" get ns "${NS}" >/dev/null 2>&1 || \
